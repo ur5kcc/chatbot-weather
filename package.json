@@ -1,0 +1,116 @@
+{
+  "name": "express-typescript-starter",
+  "version": "0.1.0",
+  "description": "A starting point for Node.js express apps with TypeScript",
+  "repository": "https://github.com/Microsoft/TypeScript-Node-Starter",
+  "author": "Bowden Kelly",
+  "license": "MIT",
+  "scripts": {
+    "start": "npm run serve",
+    "build": "rm -rf lib/ && babel src --out-dir lib --ignore '**/*.test.ts' --extensions '.ts'",
+    "serve": "node dist/server.js",
+    "watch-node": "nodemon dist/server.js",
+    "watch": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run watch-node\"",
+    "test": "jest --forceExit --coverage --verbose",
+    "watch-test": "npm run test -- --watchAll",
+    "build-ts": "tsc",
+    "watch-ts": "tsc -w",
+    "build-sass": "node-sass src/public/css/main.scss dist/public/css/main.css",
+    "watch-sass": "node-sass -w src/public/css/main.scss dist/public/css/main.css",
+    "lint": "tsc --noEmit && eslint \"**/*.{js,ts}\" --quiet --fix",
+    "copy-static-assets": "ts-node copyStaticAssets.ts",
+    "debug": "npm run build && npm run watch-debug",
+    "serve-debug": "nodemon --inspect dist/server.js",
+    "watch-debug": "concurrently -k -p \"[{name}]\" -n \"Sass,TypeScript,Node\" -c \"yellow.bold,cyan.bold,green.bold\" \"npm run watch-sass\" \"npm run watch-ts\" \"npm run serve-debug\""
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "post-commit": "git update-index --again"
+    }
+  },
+  "lint-staged": {
+    "*.{html,json,md,yml,graphql}": [
+      "prettier --write",
+      "git add"
+    ],
+    "*.{ts,js}": [
+      "eslint --fix",
+      "git add"
+    ]
+  },
+  "jest": {
+    "reporters": [
+      "default",
+      "jest-junit"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/common-mocks.js"
+    ],
+    "testEnvironment": "node"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.5",
+    "body-parser": "^1.19.0",
+    "compression": "^1.7.4",
+    "connect-mongo": "^3.0.0",
+    "dotenv": "^8.1.0",
+    "errorhandler": "^1.5.1",
+    "express": "^4.17.1",
+    "express-flash": "0.0.2",
+    "express-session": "^1.16.2",
+    "express-validator": "^6.2.0",
+    "lodash": "4.17.15",
+    "messaging-api-viber": "0.8.2",
+    "mongoose": "^5.7.1",
+    "request": "^2.88.0",
+    "ts-custom-error": "3.1.1",
+    "uuid": "3.3.3",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "7.7.0",
+    "@babel/core": "7.7.2",
+    "@babel/node": "7.7.0",
+    "@babel/plugin-proposal-object-rest-spread": "7.6.2",
+    "@babel/preset-env": "7.7.1",
+    "@babel/preset-typescript": "7.7.2",
+    "@shelf/eslint-config": "0.8.2",
+    "@types/async": "^3.0.2",
+    "@types/bcrypt-nodejs": "^0.0.30",
+    "@types/bluebird": "^3.5.27",
+    "@types/body-parser": "^1.17.1",
+    "@types/chai": "^4.2.3",
+    "@types/compression": "^1.0.1",
+    "@types/concurrently": "^4.1.0",
+    "@types/connect-mongo": "^0.0.43",
+    "@types/dotenv": "^6.1.1",
+    "@types/errorhandler": "^0.0.32",
+    "@types/eslint": "^6.1.1",
+    "@types/express": "^4.17.1",
+    "@types/express-flash": "0.0.1",
+    "@types/express-session": "^1.15.14",
+    "@types/jest": "^24.0.18",
+    "@types/jquery": "^3.3.31",
+    "@types/lodash": "^4.14.141",
+    "@types/lusca": "^1.6.1",
+    "@types/mongoose": "5.5.32",
+    "@types/node": "^12.7.8",
+    "@types/request": "^2.48.3",
+    "@types/shelljs": "^0.8.5",
+    "@types/winston": "^2.4.4",
+    "@typescript-eslint/eslint-plugin": "^2.3.1",
+    "@typescript-eslint/parser": "^2.3.1",
+    "babel-jest": "24.9.0",
+    "eslint": "^6.4.0",
+    "husky": "3.0.9",
+    "jest": "^24.9.0",
+    "lint-staged": "9.4.2",
+    "prettier": "1.19.1",
+    "shelljs": "^0.8.3",
+    "ts-jest": "^24.1.0",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.3"
+  },
+  "main": "index.js"
+}
