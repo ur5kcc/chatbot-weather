@@ -1,24 +1,30 @@
-import {Response} from 'express';
-import {Forecast as IForecast} from '../../types/forecast';
+import {Request, Response} from 'express';
+import log from '../../util/logger';
+import {Forecast} from '../../types/forecast';
 import {ValidationError} from '../../util/errors';
 import {ErrorCodes} from '../../types/error';
-import {createForecast} from '../../controllers/forecast';
-
-const DAY_MILISECONDS = 86400000;
+import {dal} from '../../dal';
+import {DAY_MILISECONDS, getUnixCurrentTime, getUnixTimeFromString} from '../../util/time';
 
 const Messages = {
   combinedDates: 'Date range and exect date used together',
   dateInPast: 'Date is in the past, forecast not valid',
-  emptyText: 'No forecast to store in database'
+  emptyText: 'No forecast to store in database',
+  invalidDates: 'One or more of the providen dates is invalid'
 };
 
-export async function createForecastHandler(req, res) {
+export async function createForecastHandler(req: Request, res: Response): Promise<Response> {
   const {text, exectDate, dateFrom, dateTo} = req.body;
-  await validateCreation({text, exectDate, dateFrom, dateTo, res});
-  await createForecast({text, exectDate, dateFrom, dateTo});
+  const forecast = await validateForecast({text, exectDate, dateFrom, dateTo, res});
+  log.info('Validated forecast');
+
+  await dal.createForecast(forecast);
+  log.info('Created new forecast');
+
+  return res.status(200).send({message: 'ok'});
 }
 
-async function validateCreation({
+export async function validateForecast({
   text,
   exectDate,
   dateFrom,
@@ -26,29 +32,43 @@ async function validateCreation({
   res
 }: {
   text: string;
-  exectDate: string;
-  dateFrom: string;
-  dateTo: string;
+  exectDate?: string;
+  dateFrom?: string;
+  dateTo?: string;
   res: Response;
-}): Promise<void> {
+}): Promise<Forecast> {
   if (!text || !text.length) {
-    await sendMessage(res, Messages.emptyText);
+    await sendResponseError(res, Messages.emptyText);
     throw new ValidationError(ErrorCodes.emptyText, Messages.emptyText);
   }
 
   if (exectDate && (dateFrom || dateTo)) {
-    await sendMessage(res, Messages.combinedDates);
+    await sendResponseError(res, Messages.combinedDates);
     throw new ValidationError(ErrorCodes.combinedDates, Messages.combinedDates);
   }
 
   if (exectDate) {
-    if (new Date().getTime() - DAY_MILISECONDS > new Date(exectDate).getTime()) {
-      await sendMessage(res, Messages.dateInPast);
+    const exectDateUnix = getUnixTimeFromString(exectDate);
+
+    if (getUnixCurrentTime() - DAY_MILISECONDS > exectDateUnix) {
+      await sendResponseError(res, Messages.dateInPast);
       throw new ValidationError(ErrorCodes.dateInPast, Messages.dateInPast);
     }
+
+    return {text, exectDate: exectDateUnix};
   }
+
+  const dateFromUnix = getUnixTimeFromString(dateFrom);
+  const dateToUnix = getUnixTimeFromString(dateTo);
+  console.log(dateToUnix, dateFromUnix, dateTo, dateFrom);
+  if (!dateFromUnix || !dateToUnix) {
+    await sendResponseError(res, Messages.invalidDates);
+    throw new ValidationError(ErrorCodes.invalidDates, Messages.invalidDates);
+  }
+
+  return {text, dateFrom: dateFromUnix, dateTo: dateToUnix};
 }
 
-async function sendMessage(res: Response, message: string): Promise<Response> {
+async function sendResponseError(res: Response, message: string): Promise<Response> {
   return res.status(400).send({message});
 }

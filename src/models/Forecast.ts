@@ -7,6 +7,9 @@ const forecastSchema = new mongoose.Schema(
   {
     _id: {type: String, unique: true},
     text: String,
+    exectDate: Number,
+    dateFrom: Number,
+    dateTo: Number,
     date: Date,
     upvotes: Number,
     downvotes: Number,
