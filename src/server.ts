@@ -1,6 +1,6 @@
 import errorHandler from 'errorhandler';
 import app from './app';
-import {DBConnection as connectToMongo} from './controllers/db';
+import {DBConnection as connectToMongo} from './dal/db';
 
 let server;
 app.use(errorHandler());

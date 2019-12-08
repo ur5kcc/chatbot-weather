@@ -14,4 +14,4 @@ const forecastSchema = new mongoose.Schema(
   },
   {timestamps: true}
 );
-export const Forecast = mongoose.model<ForecastDocument>('Forecast', forecastSchema);
+export const ForecastMongo = mongoose.model<ForecastDocument>('Forecast', forecastSchema);
