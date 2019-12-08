@@ -56,6 +56,6 @@ function getCorrectForecast({forecasts, timestampFrom, timestampTo}): ForecastDo
   }
 
   return correctForecasts.sort(function(a, b) {
-    return b - a;
+    return b.dateFrom - a.dateFrom;
   })[0];
 }
