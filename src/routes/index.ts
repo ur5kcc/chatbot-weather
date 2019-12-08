@@ -7,8 +7,9 @@ import {
   getForecastInRangeHandler
 } from './get';
 import {updateExectForecastHandler, updateRangeForecastHandler} from './put';
+import {viberHander} from './webhooks';
 
-const ROUTES_URLS = {
+export const ROUTES_URLS = {
   viber: '/viber/webhook',
   facebook: '/facebook/webhook',
   importForecasts: '/forecasts',
@@ -29,3 +30,5 @@ router.put(ROUTES_URLS.forecastByDate, authorizeRequest, updateExectForecastHand
 
 router.get(ROUTES_URLS.forecastByRange, authorizeRequest, getForecastInRangeHandler);
 router.put(ROUTES_URLS.forecastByRange, authorizeRequest, updateRangeForecastHandler);
+
+router.post(ROUTES_URLS.viber, viberHander);

@@ -1,11 +1,15 @@
 export interface Button {
         Columns: number;
         Rows: number;
-        ActionType: number;
+        ActionType: string;
         ActionBody: string;
         Image?: string;
         Text: string;
         TextSize?: string;
         TextVAlign?: string;
-        TextHAlign: string;
+        TextHAlign?: string;
+        BgColor?: string;
+        BgMediaType?: string;
+        BgLoop?: boolean;
+        TextOpacity?: number;
 }
