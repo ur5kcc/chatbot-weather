@@ -4,7 +4,6 @@ import {BASE_URL, VIBER_TOKEN} from '../util/secrets';
 import {ROUTES_URLS} from '../routes';
 import {Replies, defaultKeyboard} from './helpers';
 import {dal} from '../dal';
-import {getCurrentUnixDay} from '../util/time';
 import log from '../util/logger';
 import LOCALIZATION from '../localization';
 
@@ -76,6 +75,16 @@ export class ViberBot {
     if (get(req, 'body.message.text', '') == Replies.storm) {
       const forecast = await dal.getForecastById('storm');
       log.info('Fetched forecast');
+      if (!forecast) {
+        return this.sendMessage(id, 'Прогноз погоди на вказану дату не знайдено');
+      }
+
+      return this.sendMessage(id, forecast.text.trim() || LOCALIZATION.empty);
+    }
+
+    if (get(req, 'body.message.text', '') == Replies.getNowWeather) {
+      const forecast = await dal.getNowWeather();
+      log.info('Fetched now weather', forecast);
       if (!forecast) {
         return this.sendMessage(id, 'Прогноз погоди на вказану дату не знайдено');
       }

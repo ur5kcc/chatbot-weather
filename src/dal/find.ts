@@ -2,7 +2,16 @@ import uuid from 'uuid/v1';
 import {ForecastDocument, ForecastMongo} from '../models/Forecast';
 import {Forecast as IForecast} from '../types/forecast';
 import {DAY_MILISECONDS} from '../util/time';
+import {getMysqlConnection} from './mysql';
 import log from '../util/logger';
+
+export async function getNowWeather(): Promise<ForecastDocument> {
+  const connection = await getMysqlConnection();
+
+  return connection.query(
+    'SELECT * FROM meteo WHERE `station_code`=33301 ORDER BY id DESC LIMIT 1'
+  );
+}
 
 export async function getForecastByTimestampExect(timestamp: number): Promise<ForecastDocument> {
   return ForecastMongo.findOne({

@@ -4,7 +4,8 @@ import LOCALIZATION from '../../localization';
 export enum Replies {
   'getTodayWeather' = 'getTodayWeather',
   'getWeather3Days' = 'getWeather3Days',
-  'storm' = 'shtormWeatherIncoming'
+  'storm' = 'shtormWeatherIncoming',
+  'getNowWeather' = 'getNowWeather'
 }
 
 export const defaultKeyboard: {
@@ -49,6 +50,19 @@ export const defaultKeyboard: {
         ActionType: 'reply',
         ActionBody: Replies.storm,
         Text: LOCALIZATION.storms,
+        TextSize: 'regular',
+        TextVAlign: 'middle',
+        TextHAlign: 'center',
+        TextOpacity: 60
+      },
+      {
+        Columns: 6,
+        Rows: 1,
+        BgColor: '#33ccff',
+        BgLoop: true,
+        ActionType: 'reply',
+        ActionBody: Replies.getNowWeather,
+        Text: LOCALIZATION.getNowWeather,
         TextSize: 'regular',
         TextVAlign: 'middle',
         TextHAlign: 'center',
