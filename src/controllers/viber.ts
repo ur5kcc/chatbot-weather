@@ -2,7 +2,10 @@ import {ViberClient} from 'messaging-api-viber';
 import {get} from 'lodash';
 import {BASE_URL, VIBER_TOKEN} from '../util/secrets';
 import {ROUTES_URLS} from '../routes';
-import {defaultKeyboard} from './helpers';
+import {Replies, defaultKeyboard} from './helpers';
+import {dal} from '../dal';
+import {getCurrentUnixDay} from '../util/time';
+import log from '../util/logger';
 
 let client;
 export class ViberBot {
@@ -12,7 +15,7 @@ export class ViberBot {
     if (!this.client) {
       this.client = ViberClient.connect(VIBER_TOKEN);
       this.client
-        .setWebhook(`${BASE_URL}${ROUTES_URLS.viber}`, ['message_recieved'])
+        .setWebhook(`${BASE_URL}${ROUTES_URLS.viber}`, ['subscribed', 'conversation_started'])
         .catch(e => console.log(e));
       // eslint-disable-next-line prefer-destructuring
       client = this.client;
@@ -40,18 +43,24 @@ export class ViberBot {
   }
 
   public async handle(req, res) {
+    res.status(200).send();
     const event = get(req, 'body', null);
-    console.log(event);
+    log.debug(event);
     const id = get(req, 'body.sender.id', null);
 
     if (!id) {
       return res.status(200).send();
     }
 
-    return this.sendMessage(
-      id,
-      'hello, just wait a bit more and we will implement all weather forecast functionality ;)'
-    );
+    if (get(req, 'body.message.text', '') == Replies.getTodayWeather) {
+      const forecast = await dal.getForecastByTimestampExect(getCurrentUnixDay());
+      log.info('Fetched forecast');
+      if (!forecast) {
+        return this.sendMessage(id, 'Прогноз погоди на вказану дату не знайдено');
+      }
+
+      return this.sendMessage(id, forecast.text);
+    }
   }
 
   public async newUserEnrollment({id, name, language, country, api_version: apiVersion}) {
