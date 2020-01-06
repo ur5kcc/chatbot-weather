@@ -6,6 +6,7 @@ import {Replies, defaultKeyboard} from './helpers';
 import {dal} from '../dal';
 import {getCurrentUnixDay} from '../util/time';
 import log from '../util/logger';
+import LOCALIZATION from '../localization';
 
 let client;
 export class ViberBot {
@@ -53,7 +54,7 @@ export class ViberBot {
     }
 
     if (get(req, 'body.message.text', '') == Replies.getTodayWeather) {
-      const forecast = await dal.getForecastByTimestampExect(getCurrentUnixDay());
+      const forecast = await dal.getForecastById('today');
       log.info('Fetched forecast');
       if (!forecast) {
         return this.sendMessage(id, 'Прогноз погоди на вказану дату не знайдено');
@@ -61,6 +62,28 @@ export class ViberBot {
 
       return this.sendMessage(id, forecast.text);
     }
+
+    if (get(req, 'body.message.text', '') == Replies.getWeather3Days) {
+      const forecast = await dal.getForecastById('threedays');
+      log.info('Fetched forecast');
+      if (!forecast) {
+        return this.sendMessage(id, 'Прогноз погоди на вказані дати не знайдено');
+      }
+
+      return this.sendMessage(id, forecast.text);
+    }
+
+    if (get(req, 'body.message.text', '') == Replies.storm) {
+      const forecast = await dal.getForecastById('storm');
+      log.info('Fetched forecast');
+      if (!forecast) {
+        return this.sendMessage(id, 'Прогноз погоди на вказану дату не знайдено');
+      }
+
+      return this.sendMessage(id, forecast.text.trim() || LOCALIZATION.empty);
+    }
+
+    return this.sendMessage(id, 'Скористайтесь меню для того що б дізнатися погоду)');
   }
 
   public async newUserEnrollment({id, name, language, country, api_version: apiVersion}) {

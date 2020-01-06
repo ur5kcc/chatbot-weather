@@ -1,6 +1,11 @@
 import express from 'express';
 import {authorizeRequest} from './middlewares';
-import {createForecastHandler} from './post';
+import {
+  createForecastHandler,
+  createForecastStormHandler,
+  createForecastThreeDaysHandler,
+  createForecastTodayHandler
+} from './post';
 import {
   getForecastForDateHandler,
   getForecastForTodayHandler,
@@ -13,6 +18,9 @@ export const ROUTES_URLS = {
   viber: '/viber/webhook',
   facebook: '/facebook/webhook',
   importForecasts: '/forecasts',
+  importForecastsNow: '/forecasts/now',
+  importForecasts3Days: '/forecasts/three-days',
+  importForecastsStorm: '/forecasts/storms',
   getForecast: '/forecasts/:id',
   getForecastNow: '/forecasts/today',
   forecastByDate: '/forecasts/exect',
@@ -22,6 +30,9 @@ export const ROUTES_URLS = {
 export const router = express.Router();
 
 router.post(ROUTES_URLS.importForecasts, authorizeRequest, createForecastHandler);
+router.post(ROUTES_URLS.importForecastsNow, authorizeRequest, createForecastTodayHandler);
+router.post(ROUTES_URLS.importForecasts3Days, authorizeRequest, createForecastThreeDaysHandler);
+router.post(ROUTES_URLS.importForecastsStorm, authorizeRequest, createForecastStormHandler);
 
 router.get(ROUTES_URLS.getForecastNow, authorizeRequest, getForecastForTodayHandler);
 

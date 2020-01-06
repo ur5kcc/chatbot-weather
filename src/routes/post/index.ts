@@ -24,6 +24,36 @@ export async function createForecastHandler(req: Request, res: Response): Promis
   return res.status(200).send({message: 'ok'});
 }
 
+export async function createForecastTodayHandler(req: Request, res: Response): Promise<Response> {
+  const {text} = req.body;
+
+  await dal.updateTodayForecast(text);
+  log.info('Created new forecast');
+
+  return res.status(200).send({message: 'ok'});
+}
+
+export async function createForecastThreeDaysHandler(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  const {text} = req.body;
+
+  await dal.update3Days(text);
+  log.info('Created new forecast');
+
+  return res.status(200).send({message: 'ok'});
+}
+
+export async function createForecastStormHandler(req: Request, res: Response): Promise<Response> {
+  const {text} = req.body;
+
+  await dal.updateStorm(text);
+  log.info('Created new forecast');
+
+  return res.status(200).send({message: 'ok'});
+}
+
 export async function validateForecast({
   text,
   exectDate,

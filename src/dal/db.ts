@@ -9,7 +9,7 @@ class DB {
     if (client) {
       return client;
     }
-    mongoose
+    client = mongoose
       .connect(MONGODB_URI, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
       .catch(e => {
         log.info(`MongoDB connection error. Please make sure MongoDB is running. ${e}`);

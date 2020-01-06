@@ -1,7 +1,10 @@
 import {Button} from '../../types/viber';
+import LOCALIZATION from '../../localization';
 
 export enum Replies {
-  'getTodayWeather' = 'sgdksjglsjnoiir1orh128414'
+  'getTodayWeather' = 'getTodayWeather',
+  'getWeather3Days' = 'getWeather3Days',
+  'storm' = 'shtormWeatherIncoming'
 }
 
 export const defaultKeyboard: {
@@ -13,13 +16,39 @@ export const defaultKeyboard: {
     BgColor: '#FFFFFF',
     Buttons: [
       {
-        Columns: 6,
+        Columns: 3,
         Rows: 1,
-        BgColor: '#2db9b9',
+        BgColor: '#33ccff',
         BgLoop: true,
         ActionType: 'reply',
         ActionBody: Replies.getTodayWeather,
-        Text: 'Погода за сьогодні',
+        Text: LOCALIZATION.tommorow,
+        TextSize: 'regular',
+        TextVAlign: 'middle',
+        TextHAlign: 'center',
+        TextOpacity: 60
+      },
+      {
+        Columns: 3,
+        Rows: 1,
+        BgColor: '#33ccff',
+        BgLoop: true,
+        ActionType: 'reply',
+        ActionBody: Replies.getWeather3Days,
+        Text: LOCALIZATION.threeDays,
+        TextSize: 'regular',
+        TextVAlign: 'middle',
+        TextHAlign: 'center',
+        TextOpacity: 60
+      },
+      {
+        Columns: 6,
+        Rows: 1,
+        BgColor: '#33ccff',
+        BgLoop: true,
+        ActionType: 'reply',
+        ActionBody: Replies.storm,
+        Text: LOCALIZATION.storms,
         TextSize: 'regular',
         TextVAlign: 'middle',
         TextHAlign: 'center',

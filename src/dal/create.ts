@@ -7,3 +7,15 @@ export async function createForecast(forecast: IForecast): Promise<ForecastDocum
 
   return ForecastMongo.create({...forecast, _id});
 }
+
+export async function updateTodayForecast(text: IForecast): Promise<ForecastDocument> {
+  return ForecastMongo.updateOne({_id: 'today'}, {text}, {upsert: true});
+}
+
+export async function update3Days(text: IForecast): Promise<ForecastDocument> {
+  return ForecastMongo.updateOne({_id: 'threedays'}, {text}, {upsert: true});
+}
+
+export async function updateStorm(text: IForecast): Promise<ForecastDocument> {
+  return ForecastMongo.updateOne({_id: 'storm'}, {text}, {upsert: true});
+}
