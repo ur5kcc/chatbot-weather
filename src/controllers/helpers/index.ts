@@ -9,11 +9,10 @@ export enum Replies {
 }
 
 export const defaultKeyboard: {
-  keyboard: {Type: string; DefaultHeight: boolean; BgColor: string; Buttons: Button[]};
+  keyboard: {Type: string; DefaultHeight?: boolean; BgColor: string; Buttons: Button[]};
 } = {
   keyboard: {
     Type: 'keyboard',
-    //DefaultHeight: true,
     BgColor: '#FFFFFF',
     Buttons: [
       {
@@ -58,4 +57,3 @@ export const defaultKeyboard: {
     ]
   }
 };
-

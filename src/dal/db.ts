@@ -9,7 +9,6 @@ class DB {
     if (client) {
       return client;
     }
-console.error(MONGODB_URI);
     mongoose
       .connect(MONGODB_URI, {useNewUrlParser: true, useCreateIndex: true, useUnifiedTopology: true})
       .catch(e => {

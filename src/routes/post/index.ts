@@ -21,7 +21,7 @@ export async function createForecastHandler(req: Request, res: Response): Promis
   await dal.createForecast(forecast);
   log.info('Created new forecast');
 
-  return res.status(200).send({message: 'ok'});
+  return res.status(200).send({message: 'ok', text});
 }
 
 export async function createForecastTodayHandler(req: Request, res: Response): Promise<Response> {
@@ -30,7 +30,7 @@ export async function createForecastTodayHandler(req: Request, res: Response): P
   await dal.updateTodayForecast(text);
   log.info('Created new forecast');
 
-  return res.status(200).send({message: 'ok'});
+  return res.status(200).send({message: 'ok', text});
 }
 
 export async function createForecastThreeDaysHandler(
@@ -42,7 +42,7 @@ export async function createForecastThreeDaysHandler(
   await dal.update3Days(text);
   log.info('Created new forecast');
 
-  return res.status(200).send({message: 'ok'});
+  return res.status(200).send({message: 'ok', text});
 }
 
 export async function createForecastStormHandler(req: Request, res: Response): Promise<Response> {
@@ -51,7 +51,7 @@ export async function createForecastStormHandler(req: Request, res: Response): P
   await dal.updateStorm(text);
   log.info('Created new forecast');
 
-  return res.status(200).send({message: 'ok'});
+  return res.status(200).send({message: 'ok', text});
 }
 
 export async function validateForecast({
@@ -101,4 +101,25 @@ export async function validateForecast({
 
 async function sendResponseError(res: Response, message: string): Promise<Response> {
   return res.status(400).send({message});
+}
+
+export async function createInfoContentHandler(req: Request, res: Response): Promise<Response> {
+  const {text} = req.body;
+
+  await dal.upsertInfo(text);
+  log.info('Created new casual info entry');
+
+  return res.status(200).send({message: 'ok', text});
+}
+
+export async function createLegalInfoContentHandler(
+  req: Request,
+  res: Response
+): Promise<Response> {
+  const {text} = req.body;
+
+  await dal.upsertLegalInfo(text);
+  log.info('Created new legal info entry');
+
+  return res.status(200).send({message: 'ok', text});
 }
