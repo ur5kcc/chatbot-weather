@@ -4,7 +4,9 @@ import {
   createForecastHandler,
   createForecastStormHandler,
   createForecastThreeDaysHandler,
-  createForecastTodayHandler
+  createForecastTodayHandler,
+  createInfoContentHandler,
+  createLegalInfoContentHandler
 } from './post';
 import {
   getForecastForDateHandler,
@@ -24,7 +26,9 @@ export const ROUTES_URLS = {
   getForecast: '/forecasts/:id',
   getForecastNow: '/forecasts/today',
   forecastByDate: '/forecasts/exect',
-  forecastByRange: '/forecasts/range'
+  forecastByRange: '/forecasts/range',
+  info: '/information',
+  legalInfo: '/legal-info'
 };
 
 export const router = express.Router();
@@ -33,6 +37,8 @@ router.post(ROUTES_URLS.importForecasts, authorizeRequest, createForecastHandler
 router.post(ROUTES_URLS.importForecastsNow, authorizeRequest, createForecastTodayHandler);
 router.post(ROUTES_URLS.importForecasts3Days, authorizeRequest, createForecastThreeDaysHandler);
 router.post(ROUTES_URLS.importForecastsStorm, authorizeRequest, createForecastStormHandler);
+router.post(ROUTES_URLS.info, authorizeRequest, createInfoContentHandler);
+router.post(ROUTES_URLS.legalInfo, authorizeRequest, createLegalInfoContentHandler);
 
 router.get(ROUTES_URLS.getForecastNow, authorizeRequest, getForecastForTodayHandler);
 

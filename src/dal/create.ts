@@ -19,3 +19,11 @@ export async function update3Days(text: IForecast): Promise<ForecastDocument> {
 export async function updateStorm(text: IForecast): Promise<ForecastDocument> {
   return ForecastMongo.updateOne({_id: 'storm'}, {text}, {upsert: true});
 }
+
+export async function upsertLegalInfo(text: IForecast): Promise<ForecastDocument> {
+  return ForecastMongo.updateOne({_id: 'legalInfo'}, {text}, {upsert: true});
+}
+
+export async function upsertInfo(text: IForecast): Promise<ForecastDocument> {
+  return ForecastMongo.updateOne({_id: 'info'}, {text}, {upsert: true});
+}
