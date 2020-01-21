@@ -91,6 +91,13 @@ export class ViberBot {
       return this.sendMessage(userId, forecast || LOCALIZATION.empty);
     }
 
+    if (payload === REPLIES_PAYLOAD.extremeTemperatures) {
+      log.debug('Got mysql request to get current weather, exceptional case');
+      forecast = await dal.getExtrimeWeatherForToday();
+
+      return this.sendMessage(userId, forecast || LOCALIZATION.empty);
+    }
+
     const {id: legalId, excuse} = this.getCorrectId(payload);
 
     forecast = await dal.getForecastById(legalId);

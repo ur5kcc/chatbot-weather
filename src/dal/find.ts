@@ -13,25 +13,12 @@ export async function getNowWeather(): Promise<string> {
     'SELECT * FROM meteo WHERE `station_code`= 33301 ORDER BY id DESC LIMIT 1'
   );
   const [
-    {
-      year,
-      mouns,
-      day,
-      time,
-      temperature,
-      wind,
-      wind_direction,
-      clouds,
-      pressure,
-      humidity,
-      weather,
-      precipitation
-    }
+    {year, mouns, day, time, temperature, wind, wind_direction, pressure, humidity}
   ] = weatherNow[0];
   message = `${day}.${mouns}.${year} року\n${time}:00 UTC(Місцевий +2 години).\nТемпература ${temperature}°.\nВітер ${wind} м/c.\nНапрямок ${wind_direction} градусів.\nТиск ${pressure} мм.рт.ст.\nВологість ${humidity}%\n\nБільше 
 інформації та щоденник погоди школяра:\nhttps://pogoda.rovno.ua`;
-//  connection.end();  
-  
+  //  connection.end();
+
   return message;
 }
 
@@ -89,4 +76,37 @@ function getCorrectForecast({forecasts, timestampFrom, timestampTo}): ForecastDo
   return correctForecasts.sort(function(a, b) {
     return b.dateFrom - a.dateFrom;
   })[0];
+}
+
+export async function getExtrimeWeatherForToday(): Promise<string> {
+  let message = null;
+  const monthes = [
+    'Січня',
+    'Лютого',
+    'Березня',
+    'Квітня',
+    'Травня',
+    'Червня',
+    'Липня',
+    'Серпня',
+    'Вересня',
+    'Жовтня',
+    'Листопада',
+    'Грудня'
+  ];
+  const d = new Date();
+  const date = `${+d.getDate()} ${monthes[d.getMonth()]}`;
+  const connection = await getMysqlConnection();
+  const pCon = connection.promise();
+  const extremeWeatherNow = await pCon.query(
+    `SELECT * FROM  temperaturs WHERE  \`day\`=${d.getDate()} AND  \`month\`=` +
+      `${monthes[d.getMonth()]}`
+  );
+
+  const [{Tmin, yearTmin, Tmax, yearTmax}] = extremeWeatherNow[0];
+  message = `За багаторічними даними спостережень (починаючи з 1944 року) по місту Рівне у цей день:\nНайнижча температура ${Tmin} °С була зафіксована у ${yearTmin} році.\nНайвища температура ${Tmax}°С була зафіксована у ${yearTmax} році.\nБільше 
+інформації та щоденник погоди школяра:\nhttps://pogoda.rovno.ua`;
+  //  connection.end();
+
+  return message;
 }

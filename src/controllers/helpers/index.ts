@@ -7,7 +7,8 @@ export enum REPLIES_PAYLOAD {
   'storm' = 'shtormWeatherIncoming',
   'getNowWeather' = 'getNowWeather',
   'getInfo' = 'getInfo',
-  'getLegalInfo' = 'getLegalInfo'
+  'getLegalInfo' = 'getLegalInfo',
+  'extremeTemperatures' = 'extremeTemperatures'
 }
 
 export const defaultKeyboard: {
@@ -18,7 +19,20 @@ export const defaultKeyboard: {
     BgColor: '#FFFFFF',
     Buttons: [
       {
-        Columns: 6,
+        Columns: 3,
+        Rows: 1,
+        BgColor: '#33ccff',
+        BgLoop: true,
+        ActionType: 'reply',
+        ActionBody: REPLIES_PAYLOAD.extremeTemperatures,
+        Text: LOCALIZATION.extremeTemperatures,
+        TextSize: 'regular',
+        TextVAlign: 'middle',
+        TextHAlign: 'center',
+        TextOpacity: 60
+      },
+      {
+        Columns: 3,
         Rows: 1,
         BgColor: '#33ccff',
         BgLoop: true,
