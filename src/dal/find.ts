@@ -80,35 +80,18 @@ function getCorrectForecast({forecasts, timestampFrom, timestampTo}): ForecastDo
 
 export async function getExtrimeWeatherForToday(): Promise<string> {
   let message = null;
-  const monthes = [
-    'Січня',
-    'Лютого',
-    'Березня',
-    'Квітня',
-    'Травня',
-    'Червня',
-    'Липня',
-    'Серпня',
-    'Вересня',
-    'Жовтня',
-    'Листопада',
-    'Грудня'
-  ];
-  const d = new Date();
-  const date = `${+d.getDate()} ${monthes[d.getMonth()]}`;
   const connection = await getMysqlConnection();
   const pCon = connection.promise();
-  log.info('starting fetch');
-  log.info({day: d.getDate(), month: monthes[d.getMonth()]});
-  const extremeWeatherNow = await pCon.query(
-    `SELECT * FROM  temperaturs WHERE  \`day\`=${d.getDate()} AND  \`month\`=${
-      monthes[d.getMonth()]
-    }`
-  );
-  log.info(extremeWeatherNow);
+  const extremeWeatherNow = await pCon
+    .query(
+      `SELECT * FROM  temperaturs WHERE \`day\` = ${new Date().getDate()} AND \`month\`= ${new Date().getMonth() +
+        1}`
+    )
+    .catch(e => log.error(e));
+  log.info('Fetched records for today');
   const [{Tmin, yearTmin, Tmax, yearTmax}] = extremeWeatherNow[0];
 
-  message = `За багаторічними даними спостережень (починаючи з 1944 року) по місту Рівне у цей день:\nНайнижча температура ${Tmin} °С була зафіксована у ${yearTmin} році.\nНайвища температура ${Tmax} °С була зафіксована у ${yearTmax} році.\nБільше інформації та щоденник погоди школяра:\nhttps://pogoda.rovno.ua`;
+  message = `За багаторічними даними спостережень (починаючи з 1944 року) по місту Рівне у цей день:\nНайнижча температура ${Tmin} °С була зафіксована у ${yearTmin} році.\nНайвища температура ${Tmax} °С була зафіксована у ${yearTmax} році.\n\nБільше інформації та щоденник погоди школяра:\nhttps://pogoda.rovno.ua`;
 
   return message;
 }
