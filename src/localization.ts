@@ -12,7 +12,7 @@ export default {
     'Привіт ;) Погода Бот вітає вас!\nТільки тут справжні прогнози від синоптиків по Рівненщині ;)',
   legalInfo: 'Інформація для юридичних осіб',
   info: 'Корисна інформація',
-  extremeTemperatures: 'Екстримальні температури'
+  extremeTemperatures: 'Температурні рекорди'
 };
 
 export const excuseMapping = {

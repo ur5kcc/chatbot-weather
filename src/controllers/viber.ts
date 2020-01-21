@@ -92,7 +92,7 @@ export class ViberBot {
     }
 
     if (payload === REPLIES_PAYLOAD.extremeTemperatures) {
-      log.debug('Got mysql request to get current weather, exceptional case');
+      log.debug('Extreme weather exception');
       forecast = await dal.getExtrimeWeatherForToday();
 
       return this.sendMessage(userId, forecast || LOCALIZATION.empty);

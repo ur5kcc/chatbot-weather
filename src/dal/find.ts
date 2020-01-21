@@ -102,11 +102,10 @@ export async function getExtrimeWeatherForToday(): Promise<string> {
     `SELECT * FROM  temperaturs WHERE  \`day\`=${d.getDate()} AND  \`month\`=` +
       `${monthes[d.getMonth()]}`
   );
-
+  log.info(extremeWeatherNow);
   const [{Tmin, yearTmin, Tmax, yearTmax}] = extremeWeatherNow[0];
-  message = `За багаторічними даними спостережень (починаючи з 1944 року) по місту Рівне у цей день:\nНайнижча температура ${Tmin} °С була зафіксована у ${yearTmin} році.\nНайвища температура ${Tmax}°С була зафіксована у ${yearTmax} році.\nБільше 
-інформації та щоденник погоди школяра:\nhttps://pogoda.rovno.ua`;
-  //  connection.end();
+
+  message = `За багаторічними даними спостережень (починаючи з 1944 року) по місту Рівне у цей день:\nНайнижча температура ${Tmin} °С була зафіксована у ${yearTmin} році.\nНайвища температура ${Tmax} °С була зафіксована у ${yearTmax} році.\nБільше інформації та щоденник погоди школяра:\nhttps://pogoda.rovno.ua`;
 
   return message;
 }
