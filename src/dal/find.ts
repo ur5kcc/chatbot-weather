@@ -98,9 +98,12 @@ export async function getExtrimeWeatherForToday(): Promise<string> {
   const date = `${+d.getDate()} ${monthes[d.getMonth()]}`;
   const connection = await getMysqlConnection();
   const pCon = connection.promise();
+  log.info('starting fetch');
+  log.info({day: d.getDate(), month: monthes[d.getMonth()]});
   const extremeWeatherNow = await pCon.query(
-    `SELECT * FROM  temperaturs WHERE  \`day\`=${d.getDate()} AND  \`month\`=` +
-      `${monthes[d.getMonth()]}`
+    `SELECT * FROM  temperaturs WHERE  \`day\`=${d.getDate()} AND  \`month\`=${
+      monthes[d.getMonth()]
+    }`
   );
   log.info(extremeWeatherNow);
   const [{Tmin, yearTmin, Tmax, yearTmax}] = extremeWeatherNow[0];
