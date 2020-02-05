@@ -45,10 +45,8 @@ export function convertToUkraineTime(
   if (`${hours}`.length != 2) {
     hours = `0${hours}`;
   }
-  log.info({correctDate});
-  const kievDate = momentTz().tz(`${correctDate}T${`${hours}`}:00:00Z`, 'Europe/Kiev');
-  const debugInfo = {day: kievDate.format('DD'), time: kievDate.format('HH:mm')};
-  log.info(debugInfo);
+
+  const kievDate = momentTz(`${correctDate}T${`${hours}`}:00:00Z`).tz('Europe/Kiev');
 
   return {day: kievDate.format('DD'), time: kievDate.format('HH:mm')};
 }
