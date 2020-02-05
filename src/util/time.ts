@@ -1,4 +1,5 @@
 import momentTz from 'moment-timezone';
+import log from './logger';
 
 export const DAY_MILISECONDS = 86400000;
 
@@ -29,7 +30,10 @@ export function getCurrentUnixDay(): number {
   return getUnixTimeFromString(date);
 }
 
-export function convertToUkraineTime(day: number | string, hours: number | string): string {
+export function convertToUkraineTime(
+  day: number | string,
+  hours: number | string
+): {day: string; time: string} {
   const momentKiev = momentTz().tz('Europe/Kiev');
   const possibleDayValues = [`${day}`, `0${day}`]; // returning database format for day is strange and can be in random format as 04 or 4
   const currentDate = momentKiev.format('DD');
@@ -41,8 +45,10 @@ export function convertToUkraineTime(day: number | string, hours: number | strin
   if (`${hours}`.length != 2) {
     hours = `0${hours}`;
   }
+  log.info({correctDate});
+  const kievDate = momentTz().tz(`${correctDate}T${`${hours}`}:00:00Z`, 'Europe/Kiev');
+  const debugInfo = {day: kievDate.format('DD'), time: kievDate.format('HH:mm')};
+  log.info(debugInfo);
 
-  return momentTz()
-    .tz(`${correctDate}T${`${hours}`}:00:00Z`, 'Europe/Kiev')
-    .format('HH:mm');
+  return {day: kievDate.format('DD'), time: kievDate.format('HH:mm')};
 }
