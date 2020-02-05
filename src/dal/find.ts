@@ -1,7 +1,8 @@
 import uuid from 'uuid/v1';
+import moment from 'moment-timezone';
 import {ForecastDocument, ForecastMongo} from '../models/Forecast';
 import {Forecast as IForecast} from '../types/forecast';
-import {DAY_MILISECONDS} from '../util/time';
+import {DAY_MILISECONDS, convertToUkraineTime} from '../util/time';
 import {getMysqlConnection} from './mysql';
 import log from '../util/logger';
 
@@ -13,11 +14,13 @@ export async function getNowWeather(): Promise<string> {
     'SELECT * FROM meteo WHERE `station_code`= 33301 ORDER BY id DESC LIMIT 1'
   );
   const [
-    {year, mouns, day, time, temperature, wind, wind_direction, pressure, humidity}
+    {year, mouns: month, day, time, temperature, wind, wind_direction, pressure, humidity}
   ] = weatherNow[0];
-  message = `${day}.${mouns}.${year} року\n${time}:00 UTC(Місцевий +2 години).\nТемпература ${temperature}°.\nВітер ${wind} м/c.\nНапрямок ${wind_direction} градусів.\nТиск ${pressure} мм.рт.ст.\nВологість ${humidity}%\n\nБільше 
+
+  const hour = convertToUkraineTime(day, time);
+
+  message = `${day}.${month}.${year} року\n${hour}:00.\nТемпература ${temperature}°.\nВітер ${wind} м/c.\nНапрямок ${wind_direction} градусів.\nТиск ${pressure} мм.рт.ст.\nВологість ${humidity}%\n\nБільше 
 інформації та щоденник погоди школяра:\nhttps://pogoda.rovno.ua`;
-  //  connection.end();
 
   return message;
 }

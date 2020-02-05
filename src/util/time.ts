@@ -28,3 +28,21 @@ export function getCurrentUnixDay(): number {
 
   return getUnixTimeFromString(date);
 }
+
+export function convertToUkraineTime(day: number | string, hours: number | string): string {
+  const momentKiev = momentTz().tz('Europe/Kiev');
+  const possibleDayValues = [`${day}`, `0${day}`]; // returning database format for day is strange and can be in random format as 04 or 4
+  const currentDate = momentKiev.format('DD');
+  const correctDate =
+    (possibleDayValues.includes(currentDate) && momentKiev.format('YYYY-MM-DD')) ||
+    new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0]; // ToDo: getting date for rfc format, there is absolutly better solution
+  // so we need calculate offset date, eg if we are past new day
+
+  if (`${hours}`.length != 2) {
+    hours = `0${hours}`;
+  }
+
+  return momentTz()
+    .tz(`${correctDate}T${`${hours}`}:00:00Z`, 'Europe/Kiev')
+    .format('DD/MM/YYYY HH:mm');
+}
