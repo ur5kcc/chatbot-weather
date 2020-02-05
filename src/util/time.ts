@@ -44,5 +44,5 @@ export function convertToUkraineTime(day: number | string, hours: number | strin
 
   return momentTz()
     .tz(`${correctDate}T${`${hours}`}:00:00Z`, 'Europe/Kiev')
-    .format('DD/MM/YYYY HH:mm');
+    .format('HH:mm');
 }
