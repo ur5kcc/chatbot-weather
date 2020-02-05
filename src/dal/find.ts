@@ -19,7 +19,7 @@ export async function getNowWeather(): Promise<string> {
 
   const {day: correctDay, time: correctTime} = convertToUkraineTime(day, time);
 
-  message = `${correctDay}.${month}.${year} року\n${correctTime}.\nТемпература ${temperature}°.\nВітер ${wind} м/c.\nНапрямок ${wind_direction} градусів.\nТиск ${pressure} мм.рт.ст.\nВологість ${humidity}%\n\nБільше 
+  message = `${correctDay}.${month}.${year} року ${correctTime}.\nТемпература ${temperature}°.\nВітер ${wind} м/c.\nНапрямок ${wind_direction} градусів.\nТиск ${pressure} мм.рт.ст.\nВологість ${humidity}%\n\nБільше 
 інформації та щоденник погоди школяра:\nhttps://pogoda.rovno.ua`;
 
   return message;
