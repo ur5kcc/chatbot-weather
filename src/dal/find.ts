@@ -6,13 +6,22 @@ import {DAY_MILISECONDS, convertToUkraineTime} from '../util/time';
 import {getMysqlConnection} from './mysql';
 import log from '../util/logger';
 
-export async function getNowWeather(): Promise<string> {
+const CITY_TO_CODE = {
+  rivne: 33301,
+  dubno: 33296,
+  sarni: 33088
+};
+
+function getSelectString(city) {
+  return (
+    'SELECT * FROM meteo WHERE `station_code`=' + `${CITY_TO_CODE[city]} ORDER BY id DESC LIMIT 1`
+  );
+}
+export async function getNowWeatherByCity(city = 'rivne'): Promise<string> {
   let message = null;
   const connection = await getMysqlConnection();
   const pCon = connection.promise();
-  const weatherNow = await pCon.query(
-    'SELECT * FROM meteo WHERE `station_code`= 33301 ORDER BY id DESC LIMIT 1'
-  );
+  const weatherNow = await pCon.query(getSelectString(city));
   const [
     {year, mouns: month, day, time, temperature, wind, wind_direction, pressure, humidity}
   ] = weatherNow[0];

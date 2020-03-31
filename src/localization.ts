@@ -3,6 +3,7 @@ const common = {
 };
 
 export default {
+  introGetWeatherNow: 'Оберіть місто',
   tommorow: 'Прогноз погоди на завтра',
   threeDays: 'Прогноз погоди по м. Рівне та області',
   storms: 'Штормові попередження',
@@ -12,7 +13,10 @@ export default {
     'Привіт ;) Погода Бот вітає вас!\nТільки тут справжні прогнози від синоптиків по Рівненщині ;)',
   legalInfo: 'Інформація для юридичних осіб',
   info: 'Корисна інформація',
-  extremeTemperatures: 'Температурні рекорди'
+  extremeTemperatures: 'Температурні рекорди',
+  rivne: 'Рівне',
+  sarni: 'Сарни',
+  dubno: 'Дубно'
 };
 
 export const excuseMapping = {

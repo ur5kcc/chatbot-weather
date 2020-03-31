@@ -1,8 +1,13 @@
 import {ViberClient} from 'messaging-api-viber';
-import {get} from 'lodash';
+import {get, toLower} from 'lodash';
 import {BASE_URL, VIBER_TOKEN} from '../util/secrets';
 import {ROUTES_URLS} from '../routes';
-import {REPLIES_PAYLOAD, defaultKeyboard} from './helpers';
+import {
+  PAYLOAD_NOW_SPLITTER,
+  REPLIES_PAYLOAD,
+  defaultKeyboard,
+  getWeatherNowKeyboard
+} from './helpers';
 import {dal} from '../dal';
 import log from '../util/logger';
 import LOCALIZATION, {excuseMapping} from '../localization';
@@ -28,6 +33,10 @@ export class ViberBot {
   }
   public async sendMessage(id: string, text: string): Promise<void> {
     return this.client.sendText(id, text, defaultKeyboard);
+  }
+
+  public async sendIntroGetNowWeatherMessage(id: string, text: string): Promise<void> {
+    return this.client.sendText(id, text, getWeatherNowKeyboard);
   }
   public async sendCarousel(id: string, buttons: any[]): Promise<void> {
     return this.client.sendCarouselContent(id, {
@@ -85,8 +94,21 @@ export class ViberBot {
     }
 
     if (payload === REPLIES_PAYLOAD.getNowWeather) {
-      log.debug('Got mysql request to get current weather, exceptional case');
-      forecast = await dal.getNowWeather();
+      log.debug('Sending getWeatherNow keyboard set');
+
+      return this.sendIntroGetNowWeatherMessage(userId, LOCALIZATION.introGetWeatherNow);
+    }
+
+    if (
+      [
+        REPLIES_PAYLOAD.getNowWeatherDubno,
+        REPLIES_PAYLOAD.getNowWeatherRivne,
+        REPLIES_PAYLOAD.getNowWeatherSarni
+      ].includes(payload)
+    ) {
+      const city = toLower(payload.split(PAYLOAD_NOW_SPLITTER)[1]);
+      log.debug('Got mysql request to get current weather, exceptional case, parsed payload is ');
+      forecast = await dal.getNowWeatherByCity(city);
 
       return this.sendMessage(userId, forecast || LOCALIZATION.empty);
     }
