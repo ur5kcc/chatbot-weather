@@ -131,7 +131,7 @@ export const getWeatherNowKeyboard: {
         BgLoop: true,
         ActionType: 'reply',
         ActionBody: REPLIES_PAYLOAD.getNowWeatherDubno,
-        Text: LOCALIZATION.sarni,
+        Text: LOCALIZATION.dubno,
         TextSize: 'regular',
         TextVAlign: 'middle',
         TextHAlign: 'center',
