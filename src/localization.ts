@@ -16,7 +16,8 @@ export default {
   extremeTemperatures: 'Температурні рекорди',
   rivne: 'Рівне',
   sarni: 'Сарни',
-  dubno: 'Дубно'
+  dubno: 'Дубно',
+  lutsk: 'Луцьк'
 };
 
 export const excuseMapping = {

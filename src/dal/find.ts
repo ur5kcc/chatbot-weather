@@ -9,7 +9,8 @@ import log from '../util/logger';
 const CITY_TO_CODE = {
   rivne: 33301,
   dubno: 33296,
-  sarni: 33088
+  sarni: 33088,
+  lutsk: 33187
 };
 
 function getSelectString(city) {

@@ -103,7 +103,8 @@ export class ViberBot {
       [
         REPLIES_PAYLOAD.getNowWeatherDubno,
         REPLIES_PAYLOAD.getNowWeatherRivne,
-        REPLIES_PAYLOAD.getNowWeatherSarni
+        REPLIES_PAYLOAD.getNowWeatherSarni,
+        REPLIES_PAYLOAD.getNowWeatherLutsk
       ].includes(payload)
     ) {
       const city = toLower(payload.split(PAYLOAD_NOW_SPLITTER)[1]);
